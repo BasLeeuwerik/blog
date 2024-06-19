@@ -18,6 +18,16 @@ class CommentController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function show(Post $post): View
+    {
+        return view('posts.show', [
+            'post' => $post,
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -60,6 +70,6 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return redirect()->back()->with('success', 'Comment deleted successfully.');
+        return redirect(route('posts.index'));
     }
 }
