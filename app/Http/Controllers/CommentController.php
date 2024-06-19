@@ -18,9 +18,6 @@ class CommentController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Post $post): View
     {
         return view('posts.show', [
@@ -47,7 +44,7 @@ class CommentController extends Controller
 
     public function edit(Comment $comment)
     {
-        // Implementation of edit method for comments
+        //
     }
 
     public function update(Request $request, Comment $comment): RedirectResponse
@@ -56,7 +53,6 @@ class CommentController extends Controller
 
         $validated = $request->validate([
             'body' => 'required|string|max:255',
-            // Add any additional validation rules as needed
         ]);
 
         $comment->update($validated);
@@ -66,10 +62,12 @@ class CommentController extends Controller
 
     public function destroy(Comment $comment): RedirectResponse
     {
+        $post = Post::where('id', $comment->post_id)->first();
+
         Gate::authorize('delete', $comment);
 
         $comment->delete();
 
-        return redirect(route('posts.index'));
+        return redirect()->route('posts.show', $post);
     }
 }
