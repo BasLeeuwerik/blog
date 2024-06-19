@@ -50,8 +50,10 @@
                                 </x-dropdown>
                             @endif
                         </div>
-                        <p class="mt-4 text-lg text-gray-900">{{ $post->body }}</p>
-                    </div>
+                        <a href="{{ route('posts.show', $post) }}">
+                            <p class="mt-4 mb-4 text-lg text-gray-900">{{ $post->body }}</p>
+                            <!-- Display comment counter -->
+                            <span><i>{{ $post->comments->count() }} comments</i></span>                </a>                    </div>
                 </div>
             @endforeach
         </div>

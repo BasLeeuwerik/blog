@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -19,7 +20,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('posts', PostController::class)
-    ->only(['index', 'store', 'edit', 'update', 'destroy'])
+    ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-require __DIR__.'/auth.php';
+Route::resource('comments', CommentController::class)
+    ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
+    ->middleware(['auth', 'verified']);
+
+require __DIR__ . '/auth.php';
