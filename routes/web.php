@@ -4,7 +4,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\LogViewerController;
+use App\Http\Controllers\LogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,12 +28,10 @@ Route::resource('comments', CommentController::class)
     ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-    Route::get('/logs', [LogViewerController::class, 'index'])->name('logs.index');
-    Route::get('/logs/debug', [LogViewerController::class, 'debug'])->name('logs.debug');
-    Route::get('/logs/info', [LogViewerController::class, 'info'])->name('logs.info');
-    Route::get('/logs/warning', [LogViewerController::class, 'warning'])->name('logs.warning');
-    Route::get('/logs/error', [LogViewerController::class, 'error'])->name('logs.error');
-    Route::get('/logs/critical', [LogViewerController::class, 'critical'])->name('logs.critical');
-
+    Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+    Route::get('/logs/info', [LogController::class, 'info'])->name('logs.info');
+    Route::get('/logs/error', [LogController::class, 'error'])->name('logs.error');
+    Route::get('/logs/email', [LogController::class, 'email'])->name('logs.email');
+    Route::get('/logs/{level}', [LogController::class, 'log'])->name('logs.log');
 
 require __DIR__ . '/auth.php';

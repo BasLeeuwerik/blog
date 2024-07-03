@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use App\Events\PostCreated;
 
 class PostController extends Controller
 {
@@ -36,7 +37,9 @@ class PostController extends Controller
             'body' => 'required|string|max:255',
         ]);
 
-        $request->user()->posts()->create($validated);
+        $post = $request->user()->posts()->create($validated);
+
+        PostCreated::dispatch($post);
 
         return redirect(route('posts.index'));
     }

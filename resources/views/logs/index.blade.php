@@ -10,10 +10,12 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="max-w-8xl mx-auto p-4 sm:p-6 lg:p-8">
                         <div class="bg-white shadow-sm rounded-lg divide-y">
-                            <!-- Log Content -->
-                            <div class="flex-1">
-                                {!! nl2br(e($logs)) !!}
-                            </div>
+                            <h1>Logs</h1>
+                            <ul>
+                                @foreach ($logLines as $logLine)
+                                    <li>{{ $logLine }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>

@@ -37,19 +37,16 @@
 
                         <x-slot name="content">
                             <x-dropdown-link :href="route('logs.index')">
+                                {{ __('Index') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.info')">
                                 {{ __('Info') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('logs.index')">
-                                {{ __('Critical') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('logs.index')">
-                                {{ __('Debug') }}
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('logs.index')">
+                            <x-dropdown-link :href="route('logs.error')">
                                 {{ __('Error') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('logs.index')">
-                                {{ __('Warning') }}
+                            <x-dropdown-link :href="route('logs.email')">
+                                {{ __('Email') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
