@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use App\Services\LoggingServiceInterface;
 
 class LogController extends Controller
@@ -31,7 +30,7 @@ class LogController extends Controller
 
     public function index()
     {
-        return $this->showLogs('laravel.log');
+        return $this->showLogs('laravel.log', false);
     }
 
     public function info()
@@ -41,7 +40,7 @@ class LogController extends Controller
 
     public function error()
     {
-        return $this->showLogs($this->logFiles['error']);
+        return $this->showLogs('laravel.log', true);
     }
 
     public function email()
@@ -49,12 +48,22 @@ class LogController extends Controller
         return $this->showLogs($this->logFiles['email']);
     }
 
-    public function showLogs($fileName)
+    protected function showLogs($fileName, $onlyErrors = false)
     {
         $logFile = storage_path("logs/{$fileName}");
         $logs = File::exists($logFile) ? File::get($logFile) : 'Log file does not exist.';
 
         $logLines = explode(PHP_EOL, $logs);
+
+        if ($onlyErrors) {
+            $logLines = array_filter($logLines, function($line) {
+                return strpos($line, 'local.ERROR') !== false;
+            });
+        } else {
+            $logLines = array_filter($logLines, function($line) {
+                return strpos($line, 'local.ERROR') === false;
+            });
+        }
 
         return view('logs.index', compact('logLines'));
     }
