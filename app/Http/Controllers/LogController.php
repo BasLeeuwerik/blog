@@ -30,25 +30,25 @@ class LogController extends Controller
 
     public function index()
     {
-        return $this->showLogs('laravel.log', false);
+        return $this->showLogs('laravel.log', false, 'Index');
     }
 
     public function info()
     {
-        return $this->showLogs($this->logFiles['info']);
+        return $this->showLogs($this->logFiles['info'], false, 'Info');
     }
 
     public function error()
     {
-        return $this->showLogs('laravel.log', true);
+        return $this->showLogs('laravel.log', true, 'Error');
     }
 
     public function email()
     {
-        return $this->showLogs($this->logFiles['email']);
+        return $this->showLogs($this->logFiles['email'], false, 'Email');
     }
 
-    protected function showLogs($fileName, $onlyErrors = false)
+    protected function showLogs($fileName, $onlyErrors = false, $logType = 'Index')
     {
         $logFile = storage_path("logs/{$fileName}");
         $logs = File::exists($logFile) ? File::get($logFile) : 'Log file does not exist.';
@@ -56,15 +56,15 @@ class LogController extends Controller
         $logLines = explode(PHP_EOL, $logs);
 
         if ($onlyErrors) {
-            $logLines = array_filter($logLines, function($line) {
+            $logLines = array_filter($logLines, function ($line) {
                 return strpos($line, 'local.ERROR') !== false;
             });
         } else {
-            $logLines = array_filter($logLines, function($line) {
+            $logLines = array_filter($logLines, function ($line) {
                 return strpos($line, 'local.ERROR') === false;
             });
         }
 
-        return view('logs.index', compact('logLines'));
+        return view('logs.index', compact('logLines', 'logType'));
     }
 }
