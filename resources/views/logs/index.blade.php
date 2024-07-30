@@ -11,10 +11,20 @@
                     <div class="max-w-8xl mx-auto p-4 sm:p-6 lg:p-8">
                         <div class="bg-white shadow-sm rounded-lg divide-y">
                             <ul>
-                                @foreach ($logLines as $logLine)
+                                @forelse ($logLines as $logLine)
                                     <li>{{ $logLine }}</li>
-                                @endforeach
+                                @empty
+                                    <li>No logs found.</li>
+                                @endforelse
                             </ul>
+                        </div>
+                        <div class="mt-4">
+                            @if ($currentPage > 1)
+                                <a href="{{ route('logs.show', ['type' => $logType, 'page' => $currentPage - 1]) }}" class="mr-2">Previous</a>
+                            @endif
+                            @if ($linesPerPage * $currentPage < $totalLines)
+                                <a href="{{ route('logs.show', ['type' => $logType, 'page' => $currentPage + 1]) }}">Next</a>
+                            @endif
                         </div>
                     </div>
                 </div>

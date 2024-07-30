@@ -29,11 +29,8 @@ Route::resource('comments', CommentController::class)
     ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
-Route::get('/logs/info', [LogController::class, 'info'])->name('logs.info');
-Route::get('/logs/error', [LogController::class, 'error'])->name('logs.error');
-Route::get('/logs/email', [LogController::class, 'email'])->name('logs.email');
-Route::get('/logs/{level}', [LogController::class, 'log'])->name('logs.log');
+    Route::get('logs', [LogController::class, 'index'])->name('logs.index');
+Route::get('logs/{type}', [LogController::class, 'show'])->name('logs.show');
 
 Route::get('/', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
