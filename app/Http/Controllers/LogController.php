@@ -3,15 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
+use App\Services\LoggingServiceInterface;
 use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
     protected $logFiles = [
         'info' => 'info.log',
-        'error' => 'laravel.log',
+        'error' => 'laravel.log', // Error logs are in laravel.log
         'email' => 'email.log',
     ];
+
+    protected $loggingService;
+
+    public function __construct(LoggingServiceInterface $loggingService)
+    {
+        $this->loggingService = $loggingService;
+    }
+
+    /**
+     * Log a message of a given level.
+     *
+     * @param string $level
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function log(string $level)
+    {
+        $message = ucfirst($level) . ' log added';
+        $this->loggingService->log($level, $message);
+
+        return response()->json(['status' => 'success', 'message' => $message]);
+    }
 
     /**
      * Display the latest log entries.
@@ -20,22 +42,22 @@ class LogController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->showLogs('laravel.log', 'Index', false);
+        return $this->showLogs('laravel.log', 'Index', $request);
     }
 
     /**
      * Display logs by type.
      *
      * @param string $type
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function show(string $type, Request $request)
     {
         $fileName = $this->logFiles[$type] ?? 'laravel.log';
-        $logType = ucfirst($type);
-        $onlyErrors = ($type === 'error');
+        $onlyErrors = $type === 'error';
 
-        return $this->showLogs($fileName, $logType, $onlyErrors);
+        return $this->showLogs($fileName, ucfirst($type), $request, $onlyErrors);
     }
 
     /**
@@ -43,42 +65,26 @@ class LogController extends Controller
      *
      * @param string $fileName
      * @param string $logType
+     * @param Request $request
      * @param bool $onlyErrors
      * @return \Illuminate\View\View
      */
-    protected function showLogs($fileName, $logType = 'Index', $onlyErrors = false)
+    protected function showLogs($fileName, $logType, Request $request, $onlyErrors = false)
     {
-        $logFile = storage_path("logs/{$fileName}");
+        $logFilePath = storage_path("logs/{$fileName}");
         $linesPerPage = 100;
-        $page = request('page', 1);
+        $page = $request->query('page', 1);
 
-        // Check if file exists
-        if (!File::exists($logFile)) {
-            return view('logs.index', [
-                'logLines' => ['Log file does not exist.'],
-                'logType' => $logType,
-                'totalLines' => 0,
-                'linesPerPage' => $linesPerPage,
-                'currentPage' => $page,
-            ]);
-        }
-
-        $logData = $this->tailFile($logFile, $linesPerPage * $page);
+        $logData = $this->tailFile($logFilePath, $linesPerPage * $page);
         $logLines = $logData['logLines'];
         $totalLines = $logData['totalLines'];
 
-        // Filter logs based on type
         if ($onlyErrors) {
             $logLines = array_filter($logLines, function ($line) {
                 return strpos($line, 'local.ERROR') !== false;
             });
-        } else {
-            $logLines = array_filter($logLines, function ($line) {
-                return strpos($line, 'local.ERROR') === false;
-            });
         }
 
-        // Paginate filtered logs
         $logLines = array_slice($logLines, -$linesPerPage);
 
         return view('logs.index', [
@@ -99,30 +105,38 @@ class LogController extends Controller
      */
     private function tailFile($filePath, $lines = 100)
     {
+        if (!File::exists($filePath)) {
+            return ['logLines' => [], 'totalLines' => 0];
+        }
+
         $f = fopen($filePath, "r");
         $buffer = 4096;
         $totalLines = 0;
+        $linesRead = 0;
+
+        // Read file to count total lines
+        while (!feof($f)) {
+            fgets($f);
+            $totalLines++;
+        }
+
+        fseek($f, 0, SEEK_END);
         $data = '';
 
-        // Read file from end to start
-        if (flock($f, LOCK_SH)) {
-            fseek($f, 0, SEEK_END);
-            $filesize = ftell($f);
-            $offset = max(0, $filesize - ($buffer * 2)); // Ensure we don't go beyond file start
+        while (ftell($f) > 0 && $linesRead < $lines) {
+            $pos = max(-$buffer, -ftell($f));
+            fseek($f, $pos, SEEK_CUR);
+            $chunk = fread($f, $buffer);
+            $data = $chunk . $data;
+            fseek($f, $pos, SEEK_CUR);
 
-            while ($filesize - $offset > 0 && $totalLines < $lines) {
-                fseek($f, $offset);
-                $chunk = fread($f, $buffer);
-                $data = $chunk . $data;
-                $offset = max(0, $offset - $buffer);
-                $totalLines += substr_count($chunk, "\n");
-            }
-            flock($f, LOCK_UN);
+            $linesRead += substr_count($chunk, "\n");
         }
+
         fclose($f);
 
-        // Return the last few lines
         $logLines = array_slice(explode("\n", $data), -$lines);
+
         return [
             'logLines' => $logLines,
             'totalLines' => $totalLines,
