@@ -30,7 +30,29 @@ class LogController extends Controller
 
     public function index()
     {
-        return $this->showLogs('laravel.log', false, 'Index');
+        $logFilePath = storage_path('logs/laravel.log');
+        $logLines = $this->tailFile($logFilePath, 100);
+        $logType = 'Index';
+
+        return view('logs.index', [
+            'logLines' => $logLines,
+            'logType' => $logType,
+        ]);
+    }
+
+    private function tailFile($filePath, $lines = 100)
+    {
+        $f = fopen($filePath, "r");
+        $buffer = 4096;
+        fseek($f, -$buffer, SEEK_END);
+        $data = '';
+        while (ftell($f) > 0 && substr_count($data, "\n") < $lines + 1) {
+            $data = fread($f, $buffer) . $data;
+            fseek($f, -$buffer, SEEK_CUR);
+        }
+        fclose($f);
+
+        return array_slice(explode("\n", $data), -$lines);
     }
 
     public function info()
