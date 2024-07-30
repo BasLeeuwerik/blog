@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         {{ __('Posts') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.index')">
+                        {{ __('Jobs') }}
+                    </x-nav-link>
                     <x-dropdown>
                         <x-slot name="trigger">
                             <button
@@ -115,6 +118,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                 {{ __('Posts') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.index')">
+                {{ __('Jobs') }}
             </x-responsive-nav-link>
         </div>
 
