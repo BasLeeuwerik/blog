@@ -14,13 +14,13 @@ class LogController extends Controller
      */
     public function show($type)
     {
-        $logFilePath = storage_path('logs/laravel.log');
+        $filePath = storage_path('logs/laravel.log');
 
-        if (!File::exists($logFilePath)) {
-            abort(404, 'Log file does not exist');
+        if (!File::exists($filePath)) {
+            return redirect()->route('logs.index')->with('error', "Log file for '{$type}' does not exist.");
         }
 
-        $logLines = $this->getFilteredLogs($logFilePath, $type);
+        $logLines = $this->getFilteredLogs($filePath, $type);
 
         return view('logs.index', compact('logLines', 'type'));
     }
