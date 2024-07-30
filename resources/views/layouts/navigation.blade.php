@@ -39,17 +39,29 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('logs.index')">
-                                {{ __('Index') }}
-                            </x-dropdown-link>
                             <x-dropdown-link :href="route('logs.show', ['type' => 'info'])">
                                 {{ __('Info') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('logs.show', ['type' => 'error'])">
                                 {{ __('Error') }}
                             </x-dropdown-link>
-                            <x-dropdown-link :href="route('logs.show', ['type' => 'email'])">
-                                {{ __('Email') }}
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'debug'])">
+                                {{ __('Debug') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'warning'])">
+                                {{ __('Warning') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'notice'])">
+                                {{ __('Notice') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'emergency'])">
+                                {{ __('Emergency') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'alert'])">
+                                {{ __('Alert') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('logs.show', ['type' => 'critical'])">
+                                {{ __('Critical') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
@@ -121,9 +133,6 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.index')">
                 {{ __('Jobs') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('logs.index')" :active="request()->routeIs('logs.index')">
-                {{ __('Logs') }}
             </x-responsive-nav-link>
         </div>
 

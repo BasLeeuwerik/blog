@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LogTestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,7 +30,7 @@ Route::resource('comments', CommentController::class)
     ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-    Route::get('logs', [LogController::class, 'index'])->name('logs.index');
+Route::get('/generate-logs', [LogTestController::class, 'generateLogs']);
 Route::get('logs/{type}', [LogController::class, 'show'])->name('logs.show');
 
 Route::get('/', [JobController::class, 'index'])->name('jobs.index');
