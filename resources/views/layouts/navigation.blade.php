@@ -134,6 +134,32 @@
             <x-responsive-nav-link :href="route('jobs.index')" :active="request()->routeIs('jobs.index')">
                 {{ __('Jobs') }}
             </x-responsive-nav-link>
+            <div x-show="open" @click.away="open = false" x-cloak class="mt-2 space-y-1 rounded-md shadow-lg">
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'info'])">
+                    {{ __('Info') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'error'])">
+                    {{ __('Error') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'debug'])">
+                    {{ __('Debug') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'warning'])">
+                    {{ __('Warning') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'notice'])">
+                    {{ __('Notice') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'emergency'])">
+                    {{ __('Emergency') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'alert'])">
+                    {{ __('Alert') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('logs.show', ['type' => 'critical'])">
+                    {{ __('Critical') }}
+                </x-responsive-nav-link>
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->

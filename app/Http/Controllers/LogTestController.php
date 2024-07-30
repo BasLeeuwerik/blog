@@ -8,8 +8,6 @@ class LogTestController extends Controller
 {
     public function generateLogs()
     {
-        $type = Log::class;
-
         Log::debug('This is a debug message.');
         Log::info('This is an info message.');
         Log::notice('This is a notice message.');
