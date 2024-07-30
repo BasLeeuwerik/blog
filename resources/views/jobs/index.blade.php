@@ -13,14 +13,16 @@
                         @foreach ($featuredJobs as $job)
                             <div class="max-w-md p-4 bg-white rounded-lg shadow-md dark:bg-gray-700">
                                 <h4 class="text-xl font-semibold mb-2">{{ $job->title }}</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ $job->employer->name }}</p>
-                                <p class="text-sm mb-2">Location: {{ $job->location }}</p>
-                                <p class="text-sm mb-2">Salary: {{ $job->salary }}</p>
-                                <p class="text-sm mb-2">Schedule: {{ $job->schedule }}</p>
-                                <a href="{{ $job->url }}" class="text-blue-500 dark:text-blue-300 hover:underline">Apply Now</a>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ $job->employer->name }}</p>
+                                <p class="text-sm mb-2"><b>Location:</b> {{ $job->location }}</p>
+                                <p class="text-sm mb-2"><b>Salary:</b> {{ $job->salary }}</p>
+                                <p class="text-sm mb-2"><b>Schedule:</b> {{ $job->schedule }}</p>
+                                <a href="{{ $job->url }}"
+                                    class="text-blue-500 dark:text-blue-300 hover:underline">Apply Now</a>
                                 <div class="mt-4">
                                     @foreach ($job->tags as $tag)
-                                        <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-200 mr-2">{{ $tag->name }}</span>
+                                        <span
+                                            class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-200 mr-2">{{ $tag->name }}</span>
                                     @endforeach
                                 </div>
                             </div>
@@ -32,14 +34,16 @@
                         @foreach ($jobs as $job)
                             <div class="max-w-md p-4 bg-white rounded-lg shadow-md dark:bg-gray-700">
                                 <h4 class="text-xl font-semibold mb-2">{{ $job->title }}</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ $job->employer->name }}</p>
-                                <p class="text-sm mb-2">Location: {{ $job->location }}</p>
-                                <p class="text-sm mb-2">Salary: {{ $job->salary }}</p>
-                                <p class="text-sm mb-2">Schedule: {{ $job->schedule }}</p>
-                                <a href="{{ $job->url }}" class="text-blue-500 dark:text-blue-300 hover:underline">Apply Now</a>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ $job->employer->name }}</p>
+                                <p class="text-sm mb-2"><b>Location:</b> {{ $job->location }}</p>
+                                <p class="text-sm mb-2"><b>Salary:</b> {{ $job->salary }}</p>
+                                <p class="text-sm mb-2"><b>Schedule:</b> {{ $job->schedule }}</p>
+                                <a href="{{ $job->url }}"
+                                    class="text-blue-500 dark:text-blue-300 hover:underline">Apply Now</a>
                                 <div class="mt-4">
                                     @foreach ($job->tags as $tag)
-                                        <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-200 mr-2">{{ $tag->name }}</span>
+                                        <span
+                                            class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full dark:bg-gray-600 dark:text-gray-200 mr-2">{{ $tag->name }}</span>
                                     @endforeach
                                 </div>
                             </div>
